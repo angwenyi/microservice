@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["Services/Basket/Basket.API/Basket.API.csproj", "Services/Basket/Basket.API/"]
-RUN dotnet restore "Services/Basket/Basket.API/Basket.API.csproj"
+COPY ["Services/Discount/Discount.API/Discount.API.csproj", "Services/Discount/Discount.API/"]
+RUN dotnet restore "Services/Discount/Discount.API/Discount.API.csproj"
 COPY . .
-WORKDIR "/src/Services/Basket/Basket.API"
-RUN dotnet build "Basket.API.csproj" -c Release -o /app/build
+WORKDIR "/src/Services/Discount/Discount.API"
+RUN dotnet build "Discount.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Basket.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "Discount.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Basket.API.dll"]
+ENTRYPOINT ["dotnet", "Discount.API.dll"]
